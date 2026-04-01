@@ -4,14 +4,7 @@ import HabitItem from "./HabitItem";
 const HabitList = () => {
   const { habits, showAll, setShowAll } = useHabit();
 
-  const today = new Date().toISOString().split("T")[0];
 
-  const completedToday = habits.filter((h) =>
-    h.completedDates.includes(today),
-  ).length;
-
-  const progressPercent =
-    habits.length > 0 ? Math.round((completedToday / habits.length) * 100) : 0;
 
   const topCategory =
     habits.reduce((acc, h) => {
@@ -22,7 +15,7 @@ const HabitList = () => {
   const mainFocus =
     Object.keys(topCategory).length > 0
       ? Object.keys(topCategory).reduce((a, b) =>
-        topCategory[a] > topCategory[b] ? b : a
+        topCategory[a] > topCategory[b] ? a : b
       )
       : null;
 
@@ -39,6 +32,14 @@ const HabitList = () => {
           <HabitItem key={index} habit={habit} />
         ))}
       </div>
+      {habits.length > 3 && (
+        <button
+          className="mt-4 text-sm text-indigo-600 font-medium"
+          onClick={() => setShowAll(!showAll)}
+        >
+          {showAll ? "Show Less" : "Show All"}
+        </button>
+      )}
     </div>
   );
 };

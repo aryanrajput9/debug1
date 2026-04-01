@@ -1,7 +1,9 @@
 import HabitForm from "../components/HabitForm";
 import HabitList from "../components/HabitList";
+import { useHabit } from "../context/HabitContext";
 
 const Dashboard = () => {
+  const { progressPercent, topCategory, bestStreak } = useHabit();
   return (
     <div className="h-screen flex overflow-hidden bg-slate-50">
       <aside className="w-64 bg-white border-r border-slate-200 flex flex-col">
@@ -21,6 +23,9 @@ const Dashboard = () => {
             Dashboard
           </button>
         </nav>
+        <p className="text-xl text-slate-600 text-center">
+          Top Category: {topCategory || "N/A"}
+        </p>
 
         <div className="p-4 border-t border-slate-100">
           <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
@@ -28,7 +33,7 @@ const Dashboard = () => {
               Status
             </p>
             <p className="text-xs text-slate-600">
-              You're on a 5-day streak. Keep it going!
+              You're on a 5-day {bestStreak}streak. Keep it going!
             </p>
           </div>
         </div>
@@ -37,7 +42,7 @@ const Dashboard = () => {
       <main className="flex-1 flex flex-col overflow-hidden">
         <header className="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center shrink-0">
           <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
-            Goal: 75%
+            Goal: {progressPercent}%
           </span>
         </header>
 

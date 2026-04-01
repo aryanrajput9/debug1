@@ -8,6 +8,25 @@ export const HabitProvider = ({ children }) => {
   const [habits, setHabits] = useState([]);
   const [showAll, setShowAll] = useState(false);
 
+  const today = new Date().toISOString().split("T")[0];
+
+  const completedToday = habits.filter((h) =>
+    h.completedDates.includes(today),
+  ).length;
+  const categoryCount = habits.reduce((acc, h) => {
+    const category = h.category || "other";
+    acc[category] = (acc[category] || 0) + 1;
+    return acc;
+  }, {});
+  const topCategory =
+    Object.keys(categoryCount).length > 0
+      ? Object.keys(categoryCount).reduce((a, b) =>
+        categoryCount[a] > categoryCount[b] ? a : b
+      )
+      : null;
+  const progressPercent =
+    habits.length > 0 ? Math.round((completedToday / habits.length) * 100) : 0;
+
   const addHabit = (habit) => {
     const newHabit = {
       id: Date.now(),
@@ -52,8 +71,13 @@ export const HabitProvider = ({ children }) => {
       }
     }
 
+
     return streak;
   };
+  const bestStreak = habits.reduce((max, h) => {
+    const streak = getStreak(h.completedDates);
+    return streak > max ? streak : max;
+  }, 0);
 
   const updateHabit = (id, data) => {
     setHabits((prev) => prev.map((h) => (h.id === id ? { ...h, ...data } : h)));
@@ -74,6 +98,9 @@ export const HabitProvider = ({ children }) => {
         getStreak,
         showAll,
         setShowAll,
+        progressPercent,
+        topCategory,
+        bestStreak
       }}
     >
       {children}
